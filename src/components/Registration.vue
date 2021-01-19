@@ -1,6 +1,10 @@
 <template>
   <div  class="container">
     <form>
+      <div class="text-center mb-4">
+        <!-- <img alt="Appetisers logo" src="../assets/logo.png" id="logo"> -->
+        <h1 class="h3 mb-3 font-weight-normal">Registration</h1>
+      </div>
       <div class="form-group">
         <label for="exampleInputEmail1" class="bmd-label-floating">Email address</label>
         <input type="email" class="form-control" name="email" id="exampleInputEmail1"  @change="handleChange" required >
@@ -25,7 +29,6 @@
   </div>  
 </template>
 
-
 <script> 
   import axios from 'axios';
   import router from '../router'
@@ -44,7 +47,6 @@
       },
       handleSubmit(e){
         e.preventDefault(); 
-        //console.log(this.formData)
         this.saving = true;
         const form_data = this.formData;
         axios.post('https://api.baseplate.appetiserdev.tech/api/v1/auth/register', {

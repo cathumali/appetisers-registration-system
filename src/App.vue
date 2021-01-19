@@ -8,6 +8,8 @@
 
 <script>
   import Home from './components/Home.vue';
+  // import 'vue-material/dist/vue-material.min.css'
+  // import 'vue-material/dist/theme/default.css'
 
   export default {
     name: 'App',
@@ -30,7 +32,7 @@
   width: 100px;
 };
 </style>  
-
+ 
 <style>
-  @import "https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css";
+  @import "https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css";
 </style>
