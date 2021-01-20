@@ -58,7 +58,7 @@
         this.saving = true; 
         const form_data = this.formData;
         axios.post('https://api.baseplate.appetiserdev.tech/api/v1/auth/verification/verify', {
-          ...form_data
+          ...form_data,
         })
         .then(res => {
           console.log(res)
