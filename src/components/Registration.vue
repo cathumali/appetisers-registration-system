@@ -50,7 +50,7 @@
 
 <script> 
   import axios from 'axios';
-  // import router from '../router'
+  import router from '../router'
 
   export default {
     name: 'Registration', 
@@ -80,8 +80,8 @@
         .then(res => {
           console.log(res)
           this.saving = false;
-          if(res.status == 200) {
-            // router.push('/verify')
+          if(res.status == 200) {            
+            router.push('/verify')
           }else {
             this.errorMessage = 'error';
           }
