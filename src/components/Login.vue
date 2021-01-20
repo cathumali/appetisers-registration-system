@@ -1,49 +1,69 @@
 <template> 
-  <div  class="container">
-    <form class="form-signin" autocomplete="false">
-      <div class="text-center mb-4">
-        <img alt="Appetisers logo" src="../assets/logo.png" id="logo">
-        <h1 class="h3 mb-3 font-weight-normal">Login</h1>
+  <div  class="container"> 
+    <div class="row">
+      <div class="text-center mb-4 page-title">
+        <h4 class="h3 mb-3 font-weight-normal">Login</h4>
       </div>
-
-      <div class="form-label-group">
-        <input type="email" id="inputEmail" class="form-control" placeholder="Email address" name="username" required autofocus  @change="handleChange">
-        <label for="inputEmail">Email address</label>
-      </div>
-
-      <div class="form-label-group">
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" required  @change="handleChange">
-        <label for="inputPassword">Password</label>
-      </div> 
-      <button class="btn btn-lg btn-primary btn-block" type="submit"  @click="handleSubmit" >Sign in</button>
-    </form>
+      <span class="helper-text" data-error="wrong" data-success="right">{{ errorMessage }}</span>
+      <form class="col s12">
+        <div class="row">
+          <div class="input-field col s12">
+            <i class="material-icons prefix">email</i>
+            <input id="icon_prefix" type="email" class="validate"  v-model="formData.username"  required @keyup="handleChange">
+            <label for="icon_prefix">Email Address</label>
+          </div>
+          <div class="input-field col s12">
+            <i class="material-icons prefix">lock</i>
+            <input id="lock" type="password" class="validate"  v-model="formData.password"  required @keyup="handleChange">
+            <label for="lock">Password</label>
+          </div>
+          <button class="btn btn-lg btn-primary" :class="{ disabled: saving }" type="submit"  @click="handleSubmit" > 
+            <div class="preloader-wrapper small active" style="width: 14px;height: 14px;" v-if="saving">
+              <div class="spinner-layer spinner-green-only">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div><div class="gap-patch">
+                  <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+            </div>
+            <span> Sign in </span>
+          </button>  
+        </div>
+      </form>
+    </div>
     <router-view></router-view>
   </div>
 </template>
 
-
-
 <script> 
   import axios from 'axios';
-  import router from '../router'
+  import router from '@/router'
 
   export default {
     name: 'Login', 
     data () {
       return {
         saving : false,
-        formData : {} 
+        formData : {
+          username : '',
+          password : ''
+        },
+        errorMessage: '', 
       }
     },
-      methods: {
-      handleChange(e){ 
-        this.formData = { ...this.formData,  [e.target.name] : e.target.value }
+    methods: {
+      handleChange(){ 
+        this.errorMessage = '';
+        console.log(this.formData)
       },
       handleSubmit(e){
         e.preventDefault(); 
         this.saving = true;
         const form_data = this.formData;
-        axios.post('https://api.baseplate.appetiserdev.tech/api/v1/auth/register', {
+        axios.post('https://api.baseplate.appetiserdev.tech/api/v1/auth/login', {
           ...form_data
         })
         .then(res => {
@@ -51,100 +71,22 @@
           this.saving = false;
           if(res.status == 200) {
             router.push('/success')
+          }else {
+            this.errorMessage = 'Error';
           }
-        }).catch(err => console.log(err));
+        }).catch(err => {
+          console.log(err);
+          this.saving = false;
+          this.errorMessage = err?.message;
+        });
       }    
     },
   }
 </script>
  
-
 <style> 
-:root {
-  --input-padding-x: .75rem;
-  --input-padding-y: .75rem;
-}
-
-html,
-body {
-  height: 100%;
-}
-
-body {
-  display: -ms-flexbox;
-  display: -webkit-box;
-  display: flex;
-  -ms-flex-align: center;
-  -ms-flex-pack: center;
-  -webkit-box-align: center;
-  align-items: center;
-  -webkit-box-pack: center;
-  justify-content: center;
-  padding-top: 40px;
-  padding-bottom: 40px;
-  background-color: #f5f5f5;
-}
-
-.form-signin {
-  width: 100%;
-  max-width: 420px;
-  padding: 15px;
-  margin: 0 auto;
-}
-
-.form-label-group {
-  position: relative;
-  margin-bottom: 1rem;
-}
-
-.form-label-group > input,
-.form-label-group > label {
-  padding: var(--input-padding-y) var(--input-padding-x);
-}
-
-.form-label-group > label {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: block;
-  width: 100%;
-  margin-bottom: 0; /* Override default `<label>` margin */
-  line-height: 1.5;
-  color: #495057;
-  border: 1px solid transparent;
-  border-radius: .25rem;
-  transition: all .1s ease-in-out;
-}
-
-.form-label-group input::-webkit-input-placeholder {
-  color: transparent;
-}
-
-.form-label-group input:-ms-input-placeholder {
-  color: transparent;
-}
-
-.form-label-group input::-ms-input-placeholder {
-  color: transparent;
-}
-
-.form-label-group input::-moz-placeholder {
-  color: transparent;
-}
-
-.form-label-group input::placeholder {
-  color: transparent;
-}
-
-.form-label-group input:not(:placeholder-shown) {
-  padding-top: calc(var(--input-padding-y) + var(--input-padding-y) * (2 / 3));
-  padding-bottom: calc(var(--input-padding-y) / 3);
-}
-
-.form-label-group input:not(:placeholder-shown) ~ label {
-  padding-top: calc(var(--input-padding-y) / 3);
-  padding-bottom: calc(var(--input-padding-y) / 3);
-  font-size: 12px;
-  color: #777;
-}
-</style>
+ .page-title h4 {
+    font-weight: 700;
+    margin-top: 1.4em;
+  }
+</style> 

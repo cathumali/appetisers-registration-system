@@ -1,50 +1,77 @@
 <template>
-  <div  class="container">
-    <form>
-      <div class="form-group">
-        <label for="exampleInputEmail1" class="bmd-label-floating">Email address</label>
-        <input type="email" class="form-control" name="email" id="exampleInputEmail1"  @change="handleChange" required >
-        <span class="bmd-help">We'll never share your email with anyone else.</span>
+  <div  class="container">    
+     <div class="row">
+      <div class="text-center mb-4 page-title">
+        <h4 class="h3 mb-3 font-weight-normal">Registration</h4>
       </div>
-      <div class="form-group">
-        <label for="full_name" class="bmd-label-floating">Full Name</label>
-        <input type="text" class="form-control" id="full_name" alue="" name="full_name" v-model="full_name" @change="handleChange" required >
-      </div>
-      <div class="form-group">
-        <label for="password" class="bmd-label-floating">Password</label>
-        <input type="password" class="form-control" id="password" name="password" v-model="password"  @change="handleChange" required >
-      </div> 
-      <div class="form-group">
-        <label for="password_confirmation" class="bmd-label-floating">Confirm Password</label>
-        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" v-model="password"  @change="handleChange" required >  
-      </div>  
-      <!-- <button class="btn btn-default">Cancel</button> -->
-      <button type="submit" class="btn btn-primary btn-raised" @click="handleSubmit" >Submit</button>
-    </form>
+      <span class="helper-text" data-error="wrong" data-success="right">{{ errorMessage }}</span>
+      <form class="col s12">
+        <div class="row">
+          <div class="input-field col s12">
+            <i class="material-icons prefix">person</i>
+            <input id="icon_prefix" type="text" class="validate"  v-model="formData.full_name"  required @keyup="handleChange">
+            <label for="icon_prefix">Full Name</label>
+          </div>
+          <div class="input-field col s12">
+            <i class="material-icons prefix">email</i>
+            <input id="icon_prefix" type="email" class="validate"  v-model="formData.email"  required @keyup="handleChange">
+            <label for="icon_prefix">Email Address</label>
+          </div>
+          <div class="input-field col s12">
+            <i class="material-icons prefix">lock</i>
+            <input id="lock" type="password" class="validate" v-model="formData.password"  required @keyup="handleChange">
+            <label for="lock">Password</label>
+          </div>
+          <div class="input-field col s12">
+            <i class="material-icons prefix">lock</i>
+            <input id="lock" type="password" class="validate" v-model="formData.password_confirmation"  required @keyup="handleChange">
+            <label for="lock">Confirm Password</label>
+          </div>
+          <button class="btn btn-lg btn-primary" :class="{ disabled: saving }" type="submit" @click="handleSubmit" > 
+            <div class="preloader-wrapper small active" style="width: 14px;height: 14px;" v-if="saving">
+              <div class="spinner-layer spinner-green-only">
+                <div class="circle-clipper left">
+                  <div class="circle"></div>
+                </div><div class="gap-patch">
+                  <div class="circle"></div>
+                </div><div class="circle-clipper right">
+                  <div class="circle"></div>
+                </div>
+              </div>
+            </div>
+            Register 
+          </button>  
+        </div>
+      </form>
+    </div>
     <router-view></router-view>
   </div>  
 </template>
 
-
 <script> 
   import axios from 'axios';
-  import router from '../router'
+  // import router from '../router'
 
   export default {
     name: 'Registration', 
     data () {
       return {
         saving : false,
-        formData : {} 
+        errorMessage: '',
+        formData : {
+          email : '',
+          full_name : '',
+          password : '',
+          password_confirmation : '',
+        } 
       }
     },
     methods: {
-      handleChange(e){ 
-        this.formData = { ...this.formData,  [e.target.name] : e.target.value }
+      handleChange(){ 
+        this.errorMessage = '';
       },
       handleSubmit(e){
         e.preventDefault(); 
-        //console.log(this.formData)
         this.saving = true;
         const form_data = this.formData;
         axios.post('https://api.baseplate.appetiserdev.tech/api/v1/auth/register', {
@@ -54,9 +81,15 @@
           console.log(res)
           this.saving = false;
           if(res.status == 200) {
-            router.push('/verify')
+            // router.push('/verify')
+          }else {
+            this.errorMessage = 'error';
           }
-        }).catch(err => console.log(err));
+        }).catch(err => {
+          console.log(err)
+          this.saving = false;
+          this.errorMessage = err?.message;
+        });
       }    
     },
     setup(props) {
@@ -67,5 +100,9 @@
 </script>
  
 <style> 
+ .page-title h4 {
+    font-weight: 700;
+    margin-top: 1.4em;
+  }
 </style>
 
