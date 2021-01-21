@@ -80,7 +80,11 @@
         .then(res => {
           console.log(res)
           this.saving = false;
-          if(res.status == 200) {            
+          if(res.status == 200) {      
+            const access_token = res?.data?.data?.access_token
+            const token_type = res?.data?.data?.token_type
+            localStorage.setItem('APP_TOKEN', access_token);
+            localStorage.setItem('APP_TOKEN_TYPE', token_type);
             router.push('/verify')
           }else {
             this.errorMessage = 'error';
@@ -103,6 +107,9 @@
  .page-title h4 {
     font-weight: 700;
     margin-top: 1.4em;
+  }
+  .container {
+    padding-top: 2em;
   }
 </style>
 

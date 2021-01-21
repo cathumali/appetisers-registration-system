@@ -1,17 +1,17 @@
 <template>    
-    <app-header :title="title"></app-header> 
+    <app-header :title="title"></app-header>     
     <nav class="grey darken-3">
-      <div class="container">   
-        <div class="nav-wrapper">
-          <router-link to="/" class="brand-logo"> 
-            Appetiser Apps
-          </router-link>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><router-link to="/" > Home </router-link></li> 
-            <li><router-link to="/register" > Register </router-link></li> 
-            <li><router-link to="/login" > Login </router-link></li> 
-          </ul>
-        </div>
+      <div class="nav-wrapper">
+        <router-link to="/" class="brand-logo" style="width:100%; text-align:center" > 
+          Appetiser Apps
+        </router-link>
+      </div>
+      <div class="nav-content"> 
+        <ul class="tabs tabs-transparent" style="width:fit-content">
+          <li><router-link to="/" style="color:#000" > <h6>Home</h6> </router-link></li> 
+          <li><router-link to="/register" style="color:#000" > <h6>Register</h6> </router-link></li> 
+          <li><router-link to="/login" style="color:#000" > <h6>Login</h6> </router-link></li> 
+        </ul>
       </div>
     </nav>
     <router-view></router-view>

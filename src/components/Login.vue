@@ -89,4 +89,7 @@
     font-weight: 700;
     margin-top: 1.4em;
   }
+  .container {
+    padding-top: 2em;
+  }
 </style> 
